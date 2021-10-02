@@ -1,4 +1,3 @@
-const int Pulsador = 2;
 const int Led1 = 3;
 const int Led2 = 4;
 const int Led3 = 5;
@@ -8,7 +7,6 @@ const int Led6 = 8;
 
 void setup()
 {
-    pinMode(Pulsador, INPUT);
     pinMode(Led1, OUTPUT);
     pinMode(Led2, OUTPUT);
     pinMode(Led3, OUTPUT);
@@ -39,7 +37,7 @@ void inicioIzquierda()
     delay(500);
     digitalWrite(Led5, LOW);
     delay(500);
-    digitalWrite(Led6 HIGH);
+    digitalWrite(Led6, HIGH);
     delay(500);
     digitalWrite(Led6, LOW);
     delay(500);
@@ -76,7 +74,8 @@ void inicioDerecha()
 void loop()
 {
    inicioDerecha();
-   inicioIzquieda(); 
+   delay(50);
+   inicioIzquierda(); 
 }
 /*
 if (Pulsador == HIGH)
