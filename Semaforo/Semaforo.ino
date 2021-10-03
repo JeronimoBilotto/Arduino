@@ -1,4 +1,4 @@
-// Semaforo Rojo > Verde > Amarillo > Rojo
+// La secuencia del semaforo es la siguiente Rojo 3 segundos > Verde 3 segundos > Amarillo 2 segundos > Se repite
 
 const int rojo = 3;
 const int amarillo = 4;
