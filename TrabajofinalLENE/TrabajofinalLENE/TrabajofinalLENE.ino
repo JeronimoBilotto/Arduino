@@ -1,4 +1,5 @@
-//Incluimos la libreria I2C para el uso de un LCD con modulo I2C/
+//Incluimos la libreria LiquidCrystal para el uso de un LCD con modulo I2C
+// E inicializamos el LCD
 
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27,20,4);
@@ -22,6 +23,7 @@ int i; //Variable de incrmetación de tonos
 int OP = 0; //Variable de habilitación del conteo
 
 void setup() {
+  
   //DECLARACION DE ENTRADAS Y SALIDA/
   Serial.begin(9600); //iniciailzamos la comunicación serial
   pinMode(TRIGGER, OUTPUT); //Variable Trigger es una salida digital
@@ -34,7 +36,6 @@ void setup() {
 
   // Inicializamos el lcd
   lcd.init();
-  lcd.backlight(); 
   
 }
 
@@ -51,32 +52,36 @@ void loop() {
     Serial.println(valorLDR); //Impresión en el monitor serial el valor del fotoresistor
 
     /***Impresión en pantalla LCD de la cantidad de personas**/
-
-    if (valorLDR >= 20) { //¿Luminosidad es mayor o igual al 20%?
+    
+  //¿Luminosidad es mayor o igual al 20%?
+  
+    if (valorLDR >= 20) { 
       digitalWrite(LEDR, LOW);
       Serial.print("PERSONAS; ");
       Serial.println(C);
-      //JUANI MOSTRA EN EL LCD LA VARIABLE DE CONTEO C
+      
+      /*
+      * Enciende la luz y escribe 
+      * la cantidad de personas que entraron
+      */
+      lcd.backlight(); 
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Entraron"); 
-      lcd.setCursor(8,1)
+      lcd.setCursor(8,1);
       lcd.print("Personas");
+      
       /*
-      Mientras la variable de conteo sea menor a 100 se va a mostrar en el lcd
-      Y cuando el interruptor se pulse se va a resetear
+      Mientras la variable de conteo (personas que ingresaron) 
+      sea menor al valor indicado,
+      en este caso 5, se va a mostrar en el lcd la misma
       */
-    if(C <= 100)
+      
+    if(C <= 5)
     {
       lcd.setCursor(5,1);
       lcd.print(C);
       delay(1000);
-      i++;
-    }
-    else if (Interruptor == 1)
-    {
-      lcd.clear();
-      C = 0;
     }
       
       /***Sensor detector de ´movimiento´**/
@@ -123,16 +128,28 @@ void loop() {
           }
         }
       }
-    } else {
+ } 
+  else {
+
+      /*
+      * En caso de que la luminosidad captada por el LCD
+      * sea menor a 20% se va a encender el led y se va
+      * a escribir "Prohibido entrar" en el LCD
+      */
       digitalWrite(LEDR, HIGH);
-      lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print(PROHIBIDA LA ENTRADA.);
+      lcd.print("PROHIBIDO ");
+      lcd.setCursor(5, 1);
+      lcd.print("    ENTRAR    ");
     }
   } else {
 
-    /***Se reinicia todas las variables del sistema***/
-
+    /* Se reinicia todas las variables del sistema y
+     * se apaga el LCD.
+     *
+    */
+    lcd.noBacklight();
+    lcd.clear();
     C = 0;
   }
 }
